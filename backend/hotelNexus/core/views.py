@@ -42,3 +42,11 @@ class CreateUserAdminView(generics.CreateAPIView):
     permission_classes = [
         AllowAny]  # el allowAny no es permanente debe cambiarse en un futuro
     serializer_class = UserSerializer
+
+@api_view(['POST'])
+@authentication_classes([])
+@permission_classes([])
+def get_token(request):
+    user = User.objects.get(id=request.data['id_user'])
+    token = Token.objects.get(user=user)
+    return Response({"email": user.email, "token": token.key})

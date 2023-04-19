@@ -22,6 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('core/create',
         views.CreateUserAdminView.as_view(), name='create-adm'),
-    path('core/user/token',
+    path('core/login',
         views.CreateTokenView.as_view(), name='token'),
 ]
