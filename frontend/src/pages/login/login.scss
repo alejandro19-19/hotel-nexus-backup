@@ -1,0 +1,32 @@
+.Login {
+
+  .inicio {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all .4s;
+    border-radius: 10px;
+
+    img {
+      width: 30px;
+      margin: 10px;
+    }
+
+    p {
+      font-size: medium;
+      color: white;
+      margin-right: 10px;
+    }
+
+    &:hover {
+      cursor: pointer;
+      background: rgba(255, 255, 255, .15);
+    }
+
+  }
+
+  img {
+    width: 60%;
+  }
+}
