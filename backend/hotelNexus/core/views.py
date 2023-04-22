@@ -31,11 +31,9 @@ class CreateTokenView(ObtainAuthToken):
                 'token': token.key,
                 'email': user.email,
                 'name': user.nombre,
-            })
+            },status=status.HTTP_302_FOUND)
         else:
-            return Response({"error": True}, status=status.HTTP_200_OK)
-    #
-
+            return Response({"error": True}, status=status.HTTP_400_BAD_REQUEST)
 
 class CreateUserAdminView(generics.CreateAPIView):
     """Create user on the system"""

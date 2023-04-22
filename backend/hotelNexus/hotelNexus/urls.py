@@ -21,7 +21,7 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('core/create',
-        views.CreateUserAdminView.as_view(), name='create-adm'),
+        views.CreateUserAdminView.as_view(), name='create_user'),
     path('core/login',
-        views.CreateTokenView.as_view(), name='token'),
+        views.CreateTokenView.as_view(), name='login'),
 ]
