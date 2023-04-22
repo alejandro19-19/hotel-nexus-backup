@@ -50,6 +50,7 @@ class UserSerializer(serializers.ModelSerializer):
             user.save()
             user_admin = Recepcionista.objects.create(
                 id_user=user, salario=salario)
+        #aqui falta implementar algo que retorne error 400 cuando no se ingrese un tipo valido
         return user
 
     class Meta:
