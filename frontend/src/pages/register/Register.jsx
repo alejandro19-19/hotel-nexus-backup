@@ -5,8 +5,44 @@ import { useNavigate } from "react-router-dom";
 import icon from "../../assets/flecha.png";
 
 function Register() {
-  const [count, setCount] = useState(0);
+  const [nombre, setNombre] = useState("");
+  const [apellidos, setApellidos] = useState("");
+  const [correo, setCorreo] = useState("");
+  const [direccionResidencia, setDireccionResidencia] = useState("");
+  const [fechaNacimiento, setFechaNacimiento] = useState("");
+  const [contrasena, setContrasena] = useState("");
+
   const navigate = useNavigate();
+
+  const consultaUsuarioBD = async (datos) => {
+    const data = await fetch('http://127.0.0.1:8000/core/create',datos);
+    return data.json();
+  };
+
+  const registro = async (e) => {
+    e.preventDefault();
+    let toSend = {
+      tipo: "Cliente",
+      nombre: nombre,
+      apellido: apellidos,
+      email: correo,
+      direccion: direccionResidencia,
+      fecha_nacimiento: fechaNacimiento,
+      salario: "0",
+      password: contrasena
+    };
+
+    const datos = {
+      method: "POST",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify(toSend),
+    };
+
+    console.log("los Datos:", datos);
+
+    const response = await consultaUsuarioBD(datos);
+    console.log("response:",response)
+  }
 
   return (
     <div className="Register grid grid-cols-1 lg:grid-cols-2 min-h-screen">
@@ -34,7 +70,16 @@ function Register() {
               <input
                 type=""
                 className="w-full max-w-md py-2 px-4 rounded-lg outline-none"
-                placeholder="Nombre Completo"
+                placeholder="Nombre"
+                onChange={(e) => setNombre(e.target.value)}
+              />
+            </div>
+            <div className="flex justify-center mb-4">
+              <input
+                type=""
+                className="w-full max-w-md py-2 px-4 rounded-lg outline-none"
+                placeholder="Apellido"
+                onChange={(e) => setApellidos(e.target.value)}
               />
             </div>
             <div className="flex justify-center mb-4">
@@ -42,27 +87,31 @@ function Register() {
                 type="email"
                 className="w-full max-w-md py-2 px-4 rounded-lg outline-none"
                 placeholder="Correo electrónico"
+                onChange={(e) => setCorreo(e.target.value)}
               />
             </div>
             <div className="flex justify-center mb-4">
               <input
                 type=""
                 className="w-full max-w-md py-2 px-4 rounded-lg outline-none"
-                placeholder="Celular"
+                placeholder="Direccion"
+                onChange={(e) => setDireccionResidencia(e.target.value)}
               />
             </div>
             <div className="flex justify-center mb-4">
               <input
-                type=""
+                type="date"
                 className="w-full max-w-md py-2 px-4 rounded-lg outline-none"
-                placeholder="Cedula"
+                placeholder="Fecha de nacimiento"
+                onChange={(e) => setFechaNacimiento(e.target.value)}
               />
             </div>
             <div className="flex justify-center mb-6">
               <input
                 type="password"
                 className="w-full max-w-md py-2 px-4 rounded-lg outline-none"
-                placeholder="Password"
+                placeholder="Contraseña"
+                onChange={(e) => setContrasena(e.target.value)}
               />
             </div>
             <div className="w-full max-w-md mx-auto flex items-center justify-between text-gray-500 mb-8"></div>
@@ -70,6 +119,7 @@ function Register() {
               <button
                 type="submit"
                 className="w-full bg-gray-200 py-2 px-4 rounded-lg text-gray-900 hover:bg-gray-300 transition-colors"
+                onClick={registro}
               >
                 Registrarse
               </button>
