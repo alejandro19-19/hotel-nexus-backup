@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -50,6 +51,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -84,9 +86,22 @@ DATABASES = {
         'ENGINE':'django.db.backends.postgresql_psycopg2',  # database driver for postgres on django
         'NAME': 'hotelNexus_db',  # database name
         'USER': 'postgres',  # database user
-        'PASSWORD': '123456'  # database password cambiar a secretos
+        'PASSWORD': 'santa'  # database password cambiar a secretos
     }
 }
+
+"""    configuracion para el docker-compose
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': os.environ.get('DB_PORT'),
+    }
+}
+"""
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,

@@ -1,3 +1,5 @@
+import React, { Suspense } from "react";
+//import { useFetch } from "../../fetch/useFetch";
 import { useState } from "react";
 import logo from "../../assets/Logo_Vertical_Azul.png";
 import "./login.scss";
@@ -5,6 +7,37 @@ import icon from "../../assets/flecha.png";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const [correo, setCorreo] = useState("");
+  const [contrasena, setContrasena] = useState("");
+  //const [data, setData] = useState(null);
+
+  const consultaUsuarioBD = async (datos) => {
+    const data = await fetch('http://127.0.0.1:8000/core/login',datos);
+    return data.json();
+  };
+
+  const login = async (e) => {
+    e.preventDefault();
+    let toSend = {
+      username: correo,
+      password: contrasena,
+    };
+
+    const datos = {
+      method: "POST",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify(toSend),
+    };
+
+    console.log("los Datos:", datos);
+
+    const response = await consultaUsuarioBD(datos);
+    console.log("response:",response)
+  }
+
+ 
+
+
   const navigate = useNavigate();
 
   return (
@@ -34,6 +67,7 @@ const Login = () => {
                 type="email"
                 className="w-full max-w-md py-2 px-4 rounded-lg outline-none"
                 placeholder="Correo electrónico"
+                onChange={(e) => setCorreo(e.target.value)}
               />
             </div>
             <div className="flex justify-center mb-6">
@@ -41,6 +75,7 @@ const Login = () => {
                 type="password"
                 className="w-full max-w-md py-2 px-4 rounded-lg outline-none"
                 placeholder="Password"
+                onChange={(e) => setContrasena(e.target.value)}
               />
             </div>
             <div className="w-full max-w-md mx-auto flex items-center justify-between text-gray-500 mb-8"></div>
@@ -48,6 +83,7 @@ const Login = () => {
               <button
                 type="submit"
                 className="w-full bg-gray-200 py-2 px-4 rounded-lg text-gray-900 hover:bg-gray-300 transition-colors"
+                onClick={login}
               >
                 Iniciar sesión
               </button>
