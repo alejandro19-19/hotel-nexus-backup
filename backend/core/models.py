@@ -37,7 +37,7 @@ class Cliente(models.Model):
     id_user= models.OneToOneField(
         User, on_delete=models.CASCADE, primary_key=True, related_name="client")
     habitacion_id = models.ForeignKey(
-        Habitacion, on_delete=models.CASCADE, related_name="Habitacion_id_rep")
+        Habitacion, on_delete=models.CASCADE, related_name="Habitacion_id_rep", null=True)
     
 class Administrador(models.Model):
     id_user= models.OneToOneField(
