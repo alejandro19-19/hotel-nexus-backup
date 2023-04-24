@@ -27,4 +27,22 @@
   img {
     width: 60%;
   }
+
+  .cuenta {
+    span {
+      display: flex;
+      
+      .registrarme {
+        color: gray;
+        font-size: 500;
+        transition: .1s ease;
+        margin-left: 5px;
+    
+        &:hover {
+          text-decoration: underline;
+          cursor: pointer;
+        }
+      }
+    }
+  }
 }
