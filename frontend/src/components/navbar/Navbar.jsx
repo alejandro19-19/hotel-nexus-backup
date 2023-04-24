@@ -37,7 +37,7 @@ const Navbar = () => {
         </div>
         <video src={video} autoPlay loop muted />
       </div>
-      <nav style={{ height: `${isNonMobile ? "80px" : "60px"}` }}>
+      <nav style={{ height: `${isNonMobile ? "90px" : "60px"}` }}>
         <img src={logo} alt="Logo" onClick={() => {navigate("/")}}/>
         {isNonMobile ? (
           <Box display={"flex"} alignItems={"center"}>

@@ -10,6 +10,7 @@ const Login = () => {
   const [correo, setCorreo] = useState("");
   const [contrasena, setContrasena] = useState("");
   //const [data, setData] = useState(null);
+  const navigate = useNavigate();
 
   const consultaUsuarioBD = async (datos) => {
     const data = await fetch('http://127.0.0.1:8000/core/login',datos);
@@ -33,12 +34,8 @@ const Login = () => {
 
     const response = await consultaUsuarioBD(datos);
     console.log("response:",response)
+    navigate("/home")
   }
-
- 
-
-
-  const navigate = useNavigate();
 
   return (
     <div className="Login grid grid-cols-1 lg:grid-cols-2 min-h-screen">
@@ -90,15 +87,10 @@ const Login = () => {
             </div>
           </form>
         </div>
-        <div>
+        <div className="cuenta">
           <span className="text-gray-50">
             ¿No tienes cuenta?{" "}
-            <a
-              href="/register"
-              className="text-gray-500 hover:underline transition-all"
-            >
-              Registrate
-            </a>
+            <p className="registrarme" onClick={() => {navigate("/register")}}>Registrate</p>
           </span>
         </div>
       </div>

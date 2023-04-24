@@ -126,15 +126,10 @@ function Register() {
             </div>
           </form>
         </div>
-        <div>
+        <div className="cuenta">
           <span className="text-gray-50">
             ¿Ya tienes cuenta?{" "}
-            <a
-              href="/login"
-              className="text-gray-500 hover:underline transition-all"
-            >
-              Inicia sesion
-            </a>
+            <p className="registrarme" onClick={() => {navigate("/login")}}>Inicia sesión</p>
           </span>
         </div>
       </div>
