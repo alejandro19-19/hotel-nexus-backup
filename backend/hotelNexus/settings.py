@@ -91,6 +91,7 @@ DATABASES = {
 }
 """
     #configuracion para el docker-compose
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',

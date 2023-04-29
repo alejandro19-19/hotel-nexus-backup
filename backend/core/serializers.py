@@ -56,3 +56,8 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ("tipo", "id", "nombre", "apellido", "email", "direccion", "fecha_nacimiento", "salario", "password")
+
+class ClientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cliente
+        fields = ('id_user','habitacion_id')
