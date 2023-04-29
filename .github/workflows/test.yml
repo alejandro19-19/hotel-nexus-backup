@@ -1,9 +1,6 @@
 name: Test python App
 
 on:
-  push:
-    branches:
-      - develop-backend
   pull_request: 
     branches:
       - master
