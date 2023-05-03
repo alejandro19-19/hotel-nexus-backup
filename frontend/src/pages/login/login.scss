@@ -1,5 +1,7 @@
 .Login {
 
+  position: relative;
+
   .inicio {
     position: absolute;
     display: flex;
@@ -28,6 +30,14 @@
 
   img {
     width: 60%;
+  }
+
+  .idioma {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top:10px;
+    right:20px;
   }
 
   .cuenta {
