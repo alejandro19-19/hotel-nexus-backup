@@ -4,6 +4,10 @@ import home_en from "./en/home.json";
 import home_es from "./es/home.json";
 import settings_en from "./en/settings.json";
 import settings_es from "./es/settings.json";
+import login_en from "./en/login.json"
+import login_es from "./es/login.json"
+import register_en from "./en/register.json"
+import register_es from "./es/register.json"
 
 export let languages = {
   interpolation: { escapeValue: false },
@@ -13,11 +17,15 @@ export let languages = {
       homePage: homePage_es,
       home: home_es,
       settings: settings_es,
+      login: login_es,
+      register: register_es,
     },
     en: {
       homePage: homePage_en,
       home: home_en,
       settings: settings_en,
+      login: login_en,
+      register: register_en,
     },
   },
 };
