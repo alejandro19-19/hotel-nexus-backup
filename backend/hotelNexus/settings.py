@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'hotelNexus.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
+"""
 DATABASES = {
     'default': {
         'ENGINE':'django.db.backends.postgresql_psycopg2',  # database driver for postgres on django
@@ -89,9 +89,9 @@ DATABASES = {
         'PASSWORD': '123456'  # database password cambiar a secretos
     }
 }
-
-    #configuracion para el docker-compose
 """
+    #configuracion para el docker-compose
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -102,7 +102,7 @@ DATABASES = {
         'PORT': os.environ.get('DB_PORT'),
     }
 }
-"""
+
 
 import sys
 if 'test' in sys.argv or 'test\_coverage' in sys.argv: #Covers regular testing and django-coverage
