@@ -4,14 +4,14 @@ from rest_framework import generics
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken, AuthTokenSerializer
 from rest_framework.response import Response
-from core.serializers import UserSerializer, ClientSerializer
+from core.serializers import UserSerializer, ClientSerializer, HabitacionSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import api_view
 from rest_framework.settings import api_settings
 from rest_framework.decorators import permission_classes, authentication_classes
 from django.template import loader
-from .models import Administrador, User, Cliente
+from .models import Administrador, User, Cliente, Habitacion
 
 # Create your views here.
 
@@ -40,14 +40,35 @@ class CreateUserAdminView(generics.CreateAPIView):
     permission_classes = [AllowAny]
     serializer_class = UserSerializer
 
+#Se crea una habitacion
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def register_room(request):
+    try:
+        user = Token.objects.get(key=request.auth.key).user
+        user_client = Administrador.objects.get(id_user=user.id)
+    except Administrador.DoesNotExist:
+        return Response({"error": True}, status=status.HTTP_401_UNAUTHORIZED)
+    
+    serializer = HabitacionSerializer(data=request.data)
+    if serializer.is_valid():
+        validated_data = serializer.validated_data
+        habitacion = Habitacion(**validated_data)
+        habitacion.save()
+        serializer_response = HabitacionSerializer(habitacion)
+        return Response(serializer_response.data, status=status.HTTP_201_CREATED)
 
 #Se retorna la habitacion que esta vinculada al cliente
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def get_info_client(request):
-    user = Token.objects.get(key=request.auth.key).user
-    user_client = Cliente.objects.get(id_user=user.id)
+    try:
+        user = Token.objects.get(key=request.auth.key).user
+        user_client = Cliente.objects.get(id_user=user.id)
+    except Cliente.DoesNotExist:
+        return Response({"error": True}, status=status.HTTP_404_NOT_FOUND)
     serializer = ClientSerializer(user_client, many=False, context={'request': request})
     return Response({"Info_user": serializer.data} , status=status.HTTP_200_OK)
 
