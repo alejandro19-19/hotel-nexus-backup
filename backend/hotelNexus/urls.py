@@ -26,6 +26,8 @@ urlpatterns = [
         views.CreateTokenView.as_view(), name='login'),
     path('core/client',
         views.get_info_client),
+    path('core/client/all',
+         views.get_clients),
     path('core/admin',
         views.register_room),
 ]

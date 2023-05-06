@@ -4,7 +4,7 @@ from rest_framework import generics
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken, AuthTokenSerializer
 from rest_framework.response import Response
-from core.serializers import UserSerializer, ClientSerializer, HabitacionSerializer
+from core.serializers import UserSerializer, ClientSerializer, HabitacionSerializer, AdminClientSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import api_view
@@ -71,6 +71,20 @@ def get_info_client(request):
         return Response({"error": True}, status=status.HTTP_404_NOT_FOUND)
     serializer = ClientSerializer(user_client, many=False, context={'request': request})
     return Response({"Info_user": serializer.data} , status=status.HTTP_200_OK)
+
+# Metodo para que un administrador obtenga la informacion de todos los clientes existentes
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def get_clients(request):
+    user = Token.objects.get(key=request.auth.key).user
+    if user.is_admin == True:
+        user_client = Cliente.objects.all()
+        serializer = AdminClientSerializer(
+            user_client, many=True, context={'request': request})
+        return Response({'Clientes':serializer.data},status=status.HTTP_200_OK)
+    else:
+        return Response({"error": True}, status=status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['POST'])
 @authentication_classes([])

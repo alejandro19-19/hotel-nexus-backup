@@ -67,3 +67,19 @@ class HabitacionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Habitacion
         fields = ('id','disponible')
+
+#####################################################################################
+
+class ClientDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'nombre', 'apellido','fecha_nacimiento', 'direccion',
+                  'email')
+        
+class AdminClientSerializer(serializers.ModelSerializer):
+    user = ClientDataSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = Cliente
+        fields = ("id_user", "habitacion_id")
+
