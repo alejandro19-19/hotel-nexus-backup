@@ -93,7 +93,7 @@ class recepcionistaView(APIView):
 @permission_classes([IsAuthenticated])
 def get_clients(request):
     user = Token.objects.get(key=request.auth.key).user
-    if user.is_admin == True:
+    if user.is_admin == True or user.is_recepcionista == True:
         user_client = Cliente.objects.all()
         serializer = AdminClientSerializer(
             user_client, many=True, context={'request': request})
