@@ -75,6 +75,8 @@ class adminView(APIView):
             habitacion.save()
             serializer_response = HabitacionSerializer(habitacion)
             return Response(serializer_response.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response({"error": True}, status=status.HTTP_404_NOT_FOUND)
     
 class recepcionistaView(APIView):
     permission_classes = [IsAuthenticated]
