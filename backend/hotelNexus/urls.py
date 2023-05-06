@@ -25,7 +25,9 @@ urlpatterns = [
     path('core/login',
         views.CreateTokenView.as_view(), name='login'),
     path('core/client',
-        views.get_info_client),
+        views.clientView.as_view(), name='client'),
     path('core/admin',
-        views.register_room),
+        views.adminView.as_view(), name='admin'),
+    path('core/recepcionista',
+        views.recepcionistaView.as_view(), name='recep'),
 ]
