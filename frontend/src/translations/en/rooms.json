@@ -1,0 +1,10 @@
+{
+  "rooms": "Rooms",
+  "description": "Manage hotel rooms",
+  "register": "Register",
+  "create": "Create",
+  "name": "Name",
+  "occupied": "Occupied",
+  "yes": "Yes",
+  "no": "No"
+}

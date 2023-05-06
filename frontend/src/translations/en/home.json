@@ -4,5 +4,7 @@
   "profile": "Profile",
   "profile_description": "Manage your information",
   "reservations": "Reservations",
-  "reservations_description": "Reserve your room"
+  "reservations_description": "Reserve your room",
+  "rooms": "Rooms",
+  "rooms_description": "Manage hotel rooms"
 }

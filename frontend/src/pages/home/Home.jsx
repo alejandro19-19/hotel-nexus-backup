@@ -1,47 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./home.scss";
 import Menu from "../../components/menu/Menu";
 import Header from "../../components/header/Header";
 import CardMenu from "../../components/cardMenu/CardMenu";
-import profile from "../../assets/profile.jpg";
-import img2 from "../../assets/img3.png";
-import bg from "../../assets/bg2.jpg";
 import { useTranslation } from "react-i18next";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { generateLinks } from "./links";
+import Loader from "../../components/loader/Loader";
 
 const Home = () => {
-  const [typeUser, setTypeUser] = useState("user");
   const [t, i18n] = useTranslation("home");
   const isNonMobile = useMediaQuery("(min-width:800px)");
-  let links = null;
+  let links = generateLinks("admin", t);
+  const [loading, setLoading] = useState(true)
 
-  const linksManager = [];
-  const linksReceptionist = [];
-  const linksUser = [
-    {
-      title: t("profile"),
-      description: t("profile_description"),
-      image: profile,
-      number: 1,
-      color: "red",
-      path: "/profile",
-    },
-    {
-      title: t("reservations"),
-      description: t("reservations_description"),
-      image: img2,
-      number: 2,
-      color: "purple",
-      path: "/reservations",
-    },
-  ];
-
-  if (typeUser === "user") {
-    links = linksUser;
-  }
+  // useEffect(() => {
+  //   setLoading(true)
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //   }, 3000)
+  // }, [])
 
   return (
     <div className="Home">
+      {/* {loading && <Loader />} */}
       <Menu />
       <div className="container__home">
         <div className="gradient"></div>
