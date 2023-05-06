@@ -37,16 +37,19 @@ class UserSerializer(serializers.ModelSerializer):
        # user = User.objects.create(**validated_data)
         if tipo == "Admin":
             user = get_user_model().objects.create_user(**validated_data)
+            user.is_admin = True
             user.save()
             user_admin = Administrador.objects.create(
                 id_user=user, salario=salario)
         elif tipo == "Cliente":
             user = get_user_model().objects.create_user(**validated_data)
+            user.is_client = True
             user.save()
             user_cliente = Cliente.objects.create(
                 id_user=user)
         elif tipo == "Recepcionista":
             user = get_user_model().objects.create_user(**validated_data)
+            user.is_recepcionista = True
             user.save()
             user_admin = Recepcionista.objects.create(
                 id_user=user, salario=salario)
@@ -60,10 +63,15 @@ class UserSerializer(serializers.ModelSerializer):
 class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cliente
-        fields = ('id_user','habitacion_id')
+        fields = ('id_user', 'habitacion_id')
+
+class StaffSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Administrador
+        fields = ('id_user', 'salario')
 
 class HabitacionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Habitacion
-        fields = ('id','disponible')
+        fields = ('id','disponible', 'numero')
