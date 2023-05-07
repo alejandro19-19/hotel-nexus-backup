@@ -65,6 +65,11 @@ class ClientSerializer(serializers.ModelSerializer):
         model = Cliente
         fields = ('id_user', 'habitacion_id')
 
+class AssignRoomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cliente
+        fields = ('habitacion_id',)
+
 class StaffSerializer(serializers.ModelSerializer):
     class Meta:
         model = Administrador
