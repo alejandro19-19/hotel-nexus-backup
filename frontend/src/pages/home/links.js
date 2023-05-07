@@ -40,7 +40,15 @@ export function generateLinks(type, func) {
           number: 1,
           color: "red",
           path: "/profile",
-        }
+        },
+        {
+          title: func("rooms"),
+          description: func("rooms_description"),
+          image: rooms,
+          number: 2,
+          color: "purple",
+          path: "/faceRegister",
+        },
       ]);
 
     case CLIENT:

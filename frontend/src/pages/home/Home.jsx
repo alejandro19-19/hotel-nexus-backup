@@ -11,7 +11,7 @@ import Loader from "../../components/loader/Loader";
 const Home = () => {
   const [t, i18n] = useTranslation("home");
   const isNonMobile = useMediaQuery("(min-width:800px)");
-  let links = generateLinks("admin", t);
+  let links = generateLinks("receptionist", t);
   const [loading, setLoading] = useState(true)
 
   // useEffect(() => {
