@@ -32,4 +32,8 @@ urlpatterns = [
         views.adminView.as_view(), name='admin'),
     path('core/recepcionista',
         views.recepcionistaView.as_view(), name='recep'),
-]
+    path('core/client/rooms',
+         views.get_occupied_rooms),
+    path('core/rooms/free',
+         views.get_free_rooms)
+]   

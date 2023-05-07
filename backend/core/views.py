@@ -4,7 +4,7 @@ from rest_framework import generics
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken, AuthTokenSerializer
 from rest_framework.response import Response
-from core.serializers import UserSerializer, ClientSerializer, HabitacionSerializer, AdminClientSerializer, StaffSerializer, AssignRoomSerializer
+from core.serializers import UserSerializer, ClientSerializer, HabitacionSerializer, AdminClientSerializer, StaffSerializer, AssignRoomSerializer, ClientRoomSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import api_view
@@ -116,7 +116,38 @@ def get_clients(request):
         return Response({'Clientes':serializer.data},status=status.HTTP_200_OK)
     else:
         return Response({"error": True}, status=status.HTTP_401_UNAUTHORIZED)
+    
+# Metodo para que un administrador obtenga la informacion de todas las habitaciones disponibles 
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def get_free_rooms(request):
+    user = Token.objects.get(key=request.auth.key).user
+    if user.is_admin == True or user.is_recepcionista == True:
+        rooms = Habitacion.objects.filter(disponible = True)
+        serializer = HabitacionSerializer(
+            rooms, many=True, context={'request': request})
+        return Response(serializer.data ,status=status.HTTP_200_OK)
+    else:
+        return Response({"error": True}, status=status.HTTP_401_UNAUTHORIZED)
+    
+# Metodo para que un administrador obtenga la informacion de todas las habitaciones ocupadas
 
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def get_occupied_rooms(request):
+    user = Token.objects.get(key=request.auth.key).user
+    if user.is_admin == True or user.is_recepcionista == True:
+        user_client = Cliente.objects.all().exclude(habitacion_id = None)
+        serializer = ClientRoomSerializer(
+            user_client, many= True, context={'request': request})
+        return Response(serializer.data,status=status.HTTP_200_OK)
+        #aqui poner la logica de la consulta a la BD y el serializador
+    else:
+        return Response({"error": True}, status=status.HTTP_401_UNAUTHORIZED)
+
+#   Metodo que devulve el token de un usuario
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([])

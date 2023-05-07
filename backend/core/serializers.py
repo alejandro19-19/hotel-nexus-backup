@@ -94,4 +94,10 @@ class AdminClientSerializer(serializers.ModelSerializer):
         model = Cliente
         fields = ("id_user", "habitacion_id")
 
+class ClientRoomSerializer(serializers.ModelSerializer):
+    id_user = ClientDataSerializer(many=False, read_only=True)
+    habitacion_id = HabitacionSerializer(many=False, read_only=True)
+    class Meta:
+        model = Cliente
+        fields = ("id_user", "habitacion_id")
         
