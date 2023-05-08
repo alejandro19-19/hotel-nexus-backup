@@ -59,10 +59,8 @@ class clientView(APIView):
             return Response({"error": True}, status=status.HTTP_404_NOT_FOUND)
         serializer = AssignRoomSerializer(
             user_client, data=request.data, context={'request': request})
-        # print("serializer operator", serializer_user)
         if serializer.is_valid():
-            serializer.save()
-            return Response({"Client":serializer.data}, status=status.HTTP_200_OK)
+            return verificarHabitacion(request, serializer)
         else:
             return Response({"error": True}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -155,3 +153,18 @@ def get_token(request):
     user = User.objects.get(id=request.data['id_user'])
     token = Token.objects.get(user=user)
     return Response({"email": user.email, "token": token.key})
+
+#metodos auxiliares
+
+def verificarHabitacion(request,serializer):
+    try:
+        room = Habitacion.objects.get(pk=request.data['habitacion_id'])
+        if room.disponible==False:
+            return Response({"error": True}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            room.disponible = False
+            room.save()
+            serializer.save()
+            return Response({"Client":serializer.data}, status=status.HTTP_200_OK)
+    except Habitacion.DoesNotExist:
+        return Response({"error": True}, status=status.HTTP_400_BAD_REQUEST)
