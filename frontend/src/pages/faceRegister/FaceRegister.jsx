@@ -1,5 +1,6 @@
 import "./faceRegister.scss";
 import { Settings } from "../../components/settings/Settings";
+import Menu from "../../components/menu/Menu";
 import Header from "../../components/header/Header";
 import { Box, Button, TextField } from "@mui/material";
 import { Formik } from "formik";
@@ -7,9 +8,12 @@ import { useState } from "react";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import home_icon from "../../assets/home2.png";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 //import { DataObjectOutlined } from "@mui/icons-material";
 
 function FaceRegister() {
+  const [t, i18n] = useTranslation("faceRegister");
+  
   const [data, setData] = useState({
     tipo: "Cliente",
     nombre: "",
@@ -20,6 +24,7 @@ function FaceRegister() {
     salario: "0",
     password: "",
   });
+  
   const navigate = useNavigate();
   const isNonMobile = useMediaQuery("(min-width:600px)");
 
@@ -66,11 +71,11 @@ function FaceRegister() {
           <img src={home_icon} alt="home" />
         </div>
         <div className="settings_faceRegister">
-          <Settings />
+        <Settings/>
         </div>
-        <Header title={"Register"} subtitle={"Manage yuor information"} />
+        <Header title={t("title")} subtitle={t("sub_title")} />
         <div className="formulario">
-          <p>Datos personales</p>
+          <p>{t("sub_text")}</p>
           <Formik onSubmit={submit} initialValues={data}>
             {({
               values,
@@ -95,7 +100,7 @@ function FaceRegister() {
                     fullWidth
                     variant="filled"
                     type="text"
-                    label="Nombre"
+                    label={t("name")} 
                     onBlur={handleBlur}
                     onChange={handleChange}
                     name="nombre"
@@ -106,7 +111,7 @@ function FaceRegister() {
                     fullWidth
                     variant="filled"
                     type="text"
-                    label="Apellido"
+                    label={t("last_name")} 
                     onBlur={handleBlur}
                     onChange={handleChange}
                     name="apellido"
@@ -117,7 +122,7 @@ function FaceRegister() {
                     fullWidth
                     variant="filled"
                     type="text"
-                    label="Email"
+                    label={t("email")} 
                     onBlur={handleBlur}
                     onChange={handleChange}
                     name="email"
@@ -128,7 +133,7 @@ function FaceRegister() {
                     fullWidth
                     variant="filled"
                     type="text"
-                    label="Dirección de residencia"
+                    label={t("address")} 
                     onBlur={handleBlur}
                     onChange={handleChange}
                     name="direccion"
@@ -139,7 +144,7 @@ function FaceRegister() {
                     fullWidth
                     variant="filled"
                     type="date"
-                    label="Fecha de nacimiento"
+                    label={t("date")} 
                     onBlur={handleBlur}
                     onChange={handleChange}
                     name="fecha_nacimiento"
@@ -150,7 +155,7 @@ function FaceRegister() {
                     fullWidth
                     variant="filled"
                     type="password"
-                    label="Contraseña"
+                    label={t("password")} 
                     onBlur={handleBlur}
                     onChange={handleChange}
                     name="contraseña"
@@ -165,7 +170,7 @@ function FaceRegister() {
                   mt="20px"
                 >
                   <Button type="submit" variant="contained">
-                    Crear Cuenta
+                    {t("register")} 
                   </Button>
                 </Box>
               </form>
