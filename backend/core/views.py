@@ -160,7 +160,7 @@ def verificarHabitacion(request,serializer):
     try:
         room = Habitacion.objects.get(pk=request.data['habitacion_id'])
         if room.disponible==False:
-            return Response({"error": True}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": True, "estado": "no disponible"}, status=status.HTTP_400_BAD_REQUEST)
         else:
             room.disponible = False
             room.save()
