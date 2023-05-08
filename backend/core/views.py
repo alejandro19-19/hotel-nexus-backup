@@ -34,54 +34,58 @@ class CreateTokenView(ObtainAuthToken):
                 'name': user.nombre,
             },status=status.HTTP_302_FOUND)
         else:
-            return Response({"error": True}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": True, "informacion": "Los datos enviados no son correctos" }, status=status.HTTP_400_BAD_REQUEST)
 
 class CreateUserAdminView(generics.CreateAPIView):
     """Create user on the system"""
     permission_classes = [AllowAny]
     serializer_class = UserSerializer
 
+# Clase para funciones del cliente
 class clientView(APIView):
     permission_classes = [IsAuthenticated]
+    # Metodo para que un cliente obtenga su informacion
     def get(self, request):
         try:
             user = Token.objects.get(key=request.auth.key).user
             user_client = Cliente.objects.get(id_user=user.id)
             serializer = ClientSerializer(user_client, many=False, context={'request': request})    
         except Cliente.DoesNotExist:
-            return Response({"error": True}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": True, "informacion": "El usuario no es un cliente" }, status=status.HTTP_404_NOT_FOUND)
         return Response({"Info_user": serializer.data} , status=status.HTTP_200_OK)
+    # Metodo para que un cliente haga una recepcion
     def put(self, request):
         try:
             user = Token.objects.get(key=request.auth.key).user
             user_client = Cliente.objects.get(id_user=user.id)
         except Cliente.DoesNotExist:
-            return Response({"error": True}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": True, "informacion": "El usuario no es un cliente" }, status=status.HTTP_404_NOT_FOUND)
         serializer = AssignRoomSerializer(
             user_client, data=request.data, context={'request': request})
-        # print("serializer operator", serializer_user)
         if serializer.is_valid():
-            serializer.save()
-            return Response({"Client":serializer.data}, status=status.HTTP_200_OK)
+            return verificarHabitacion(request, serializer)
         else:
-            return Response({"error": True}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": True, "informacion": "Los datos enviados no son correctos" }, status=status.HTTP_400_BAD_REQUEST)
 
+# Clase para funciones del administrador        
 class adminView(APIView):
     permission_classes = [IsAuthenticated]
+    # Metodo para que un administrador obtenga su informacion
     def get(self, request):
         try:
             user = Token.objects.get(key=request.auth.key).user
             user_admin = Administrador.objects.get(id_user=user.id)
             serializer = StaffSerializer(user_admin, many=False, context={'request': request})    
         except Administrador.DoesNotExist:
-            return Response({"error": True}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": True, "informacion": "El usuario no es un administrador" }, status=status.HTTP_404_NOT_FOUND)
         return Response({"Info_user": serializer.data} , status=status.HTTP_200_OK)
+    # Metodo para que un administrador registre una habitacion
     def post(self, request):
         try:
             user = Token.objects.get(key=request.auth.key).user
             user_client = Administrador.objects.get(id_user=user.id)
         except Administrador.DoesNotExist:
-            return Response({"error": True}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"error": True , "informacion": "El usuario no es un administrador" }, status=status.HTTP_401_UNAUTHORIZED)
         serializer = HabitacionSerializer(data=request.data)
         if serializer.is_valid():
             validated_data = serializer.validated_data
@@ -90,17 +94,19 @@ class adminView(APIView):
             serializer_response = HabitacionSerializer(habitacion)
             return Response(serializer_response.data, status=status.HTTP_201_CREATED)
         else:
-            return Response({"error": True}, status=status.HTTP_404_NOT_FOUND)
-    
+            return Response({"error": True , "informacion": "Los datos enviados no son correctos" }, status=status.HTTP_404_NOT_FOUND)
+
+# Clase para funciones del recepcionista
 class recepcionistaView(APIView):
     permission_classes = [IsAuthenticated]
+    # Metodo para que un recepcionista obtenga su informacion
     def get(self, request):
         try:
             user = Token.objects.get(key=request.auth.key).user
             user_recep = Recepcionista.objects.get(id_user=user.id)
             serializer = StaffSerializer(user_recep, many=False, context={'request': request})    
         except Recepcionista.DoesNotExist:
-            return Response({"error": True}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": True, "informacion": "El usuario no es un recepcionista" }, status=status.HTTP_404_NOT_FOUND)
         return Response({"Info_user": serializer.data} , status=status.HTTP_200_OK)
 
 # Metodo para que un administrador obtenga la informacion de todos los clientes existentes
@@ -115,7 +121,7 @@ def get_clients(request):
             user_client, many=True, context={'request': request})
         return Response({'Clientes':serializer.data},status=status.HTTP_200_OK)
     else:
-        return Response({"error": True}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response({"error": True, "informacion": "El usuario no es parte del staff" }, status=status.HTTP_401_UNAUTHORIZED)
     
 # Metodo para que un administrador obtenga la informacion de todas las habitaciones disponibles 
 @api_view(['GET'])
@@ -129,7 +135,7 @@ def get_free_rooms(request):
             rooms, many=True, context={'request': request})
         return Response(serializer.data ,status=status.HTTP_200_OK)
     else:
-        return Response({"error": True}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response({"error": True, "informacion": "El usuario no es parte del staff" }, status=status.HTTP_401_UNAUTHORIZED)
     
 # Metodo para que un administrador obtenga la informacion de todas las habitaciones ocupadas
 
@@ -145,7 +151,7 @@ def get_occupied_rooms(request):
         return Response(serializer.data,status=status.HTTP_200_OK)
         #aqui poner la logica de la consulta a la BD y el serializador
     else:
-        return Response({"error": True}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response({"error": True, "informacion": "El usuario no es parte del staff" }, status=status.HTTP_401_UNAUTHORIZED)
 
 #   Metodo que devulve el token de un usuario
 @api_view(['POST'])
@@ -155,3 +161,18 @@ def get_token(request):
     user = User.objects.get(id=request.data['id_user'])
     token = Token.objects.get(user=user)
     return Response({"email": user.email, "token": token.key})
+
+#metodos auxiliares
+
+def verificarHabitacion(request,serializer):
+    try:
+        room = Habitacion.objects.get(pk=request.data['habitacion_id'])
+        if room.disponible==False:
+            return Response({"error": True, "informacion": "La habitacion esta ocupada" }, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            room.disponible = False
+            room.save()
+            serializer.save()
+            return Response({"Client":serializer.data}, status=status.HTTP_200_OK)
+    except Habitacion.DoesNotExist:
+        return Response({"error": True, "informacion": "La habitacion ingresada no existe" }, status=status.HTTP_400_BAD_REQUEST)
