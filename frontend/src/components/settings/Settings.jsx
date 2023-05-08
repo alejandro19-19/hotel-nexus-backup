@@ -35,6 +35,7 @@ export const Settings = () => {
               link={"language"}
             />
           </li>
+          
           <li>
             <ButtonIcon text={t("sign_out")} icon={logout} link={"/"} />
           </li>
