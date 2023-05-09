@@ -60,17 +60,19 @@ class UserSerializer(serializers.ModelSerializer):
         model = get_user_model()
         fields = ("tipo", "id", "nombre", "apellido", "email", "direccion", "fecha_nacimiento", "salario", "password")
 
-class ClientSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Cliente
-        fields = ('id_user', 'habitacion_id')
-
 class AssignRoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cliente
         fields = ('habitacion_id',)
 
+class ClientDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'nombre', 'apellido','fecha_nacimiento', 'direccion',
+                  'email')
+
 class StaffSerializer(serializers.ModelSerializer):
+    id_user = ClientDataSerializer(many=False, read_only=True)
     class Meta:
         model = Administrador
         fields = ('id_user', 'salario')
@@ -80,12 +82,6 @@ class HabitacionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Habitacion
         fields = ('id','disponible', 'numero')
-
-class ClientDataSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('id', 'nombre', 'apellido','fecha_nacimiento', 'direccion',
-                  'email')
         
 class AdminClientSerializer(serializers.ModelSerializer):
     id_user = ClientDataSerializer(many=False, read_only=True)
