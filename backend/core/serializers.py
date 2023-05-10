@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
-from core.models import *
+from core.models import Cliente, Administrador, Recepcionista, Habitacion, User
 
 class AuthTokenSerializer(serializers.Serializer):
     """serializer for the user authentication objectt"""
@@ -34,24 +34,23 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         tipo = validated_data.pop('tipo')
         salario = validated_data.pop('salario')
-       # user = User.objects.create(**validated_data)
         if tipo == "Admin":
             user = get_user_model().objects.create_user(**validated_data)
             user.is_admin = True
             user.save()
-            user_admin = Administrador.objects.create(
+            Administrador.objects.create(
                 id_user=user, salario=salario)
         elif tipo == "Cliente":
             user = get_user_model().objects.create_user(**validated_data)
             user.is_client = True
             user.save()
-            user_cliente = Cliente.objects.create(
+            Cliente.objects.create(
                 id_user=user)
         elif tipo == "Recepcionista":
             user = get_user_model().objects.create_user(**validated_data)
             user.is_recepcionista = True
             user.save()
-            user_admin = Recepcionista.objects.create(
+            Recepcionista.objects.create(
                 id_user=user, salario=salario)
         #aqui falta implementar algo que retorne error 400 cuando no se ingrese un tipo valido
         return user

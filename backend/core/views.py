@@ -48,7 +48,7 @@ class CreateUserAdminView(generics.CreateAPIView):
     serializer_class = UserSerializer
 
 # Clase para funciones del cliente
-class clientView(APIView):
+class client_view(APIView):
     permission_classes = [IsAuthenticated]
     # Metodo para que un cliente obtenga su informacion
     def get(self, request):
@@ -74,7 +74,7 @@ class clientView(APIView):
             return Response({"error": True, "informacion": ERROR_SERIALIZER }, status=status.HTTP_400_BAD_REQUEST)
 
 # Clase para funciones del administrador        
-class adminView(APIView):
+class admin_view(APIView):
     permission_classes = [IsAuthenticated]
     # Metodo para que un administrador obtenga su informacion
     def get(self, request):
@@ -89,9 +89,10 @@ class adminView(APIView):
     def post(self, request):
         try:
             user = Token.objects.get(key=request.auth.key).user
-            user_client = Administrador.objects.get(id_user=user.id)
-        except Administrador.DoesNotExist:
-            return Response({"error": True , "informacion": "El usuario no es un administrador" }, status=status.HTTP_401_UNAUTHORIZED)
+            if user.is_admin == False:
+                return Response({"error": True , "informacion": "El usuario no es un administrador" }, status=status.HTTP_401_UNAUTHORIZED)
+        except Token.DoesNotExist:
+            return Response({"error": True , "informacion": "El usuario no esta registrado" }, status=status.HTTP_401_UNAUTHORIZED)
         serializer = HabitacionSerializer(data=request.data)
         if serializer.is_valid():
             validated_data = serializer.validated_data
@@ -103,7 +104,7 @@ class adminView(APIView):
             return Response({"error": True , "informacion": ERROR_SERIALIZER }, status=status.HTTP_404_NOT_FOUND)
 
 # Clase para funciones del recepcionista
-class recepcionistaView(APIView):
+class recepcionista_view(APIView):
     permission_classes = [IsAuthenticated]
     # Metodo para que un recepcionista obtenga su informacion
     def get(self, request):
@@ -116,7 +117,7 @@ class recepcionistaView(APIView):
         return Response({"Info_user": serializer.data} , status=status.HTTP_200_OK)
 
 # Metodo para que un administrador obtenga la informacion de todos los clientes existentes
-@api_view(['GET'])
+@api_view(['GET',])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def get_clients(request):
@@ -130,7 +131,7 @@ def get_clients(request):
         return Response({"error": True, "informacion": "El usuario no es parte del staff" }, status=status.HTTP_401_UNAUTHORIZED)
     
 # Metodo para que un administrador obtenga la informacion de todas las habitaciones disponibles 
-@api_view(['GET'])
+@api_view(['GET',])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def get_free_rooms(request):
@@ -145,7 +146,7 @@ def get_free_rooms(request):
     
 # Metodo para que un administrador obtenga la informacion de todas las habitaciones ocupadas
 
-@api_view(['GET'])
+@api_view(['GET',])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def get_occupied_rooms(request):
