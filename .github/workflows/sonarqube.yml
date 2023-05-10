@@ -29,6 +29,7 @@ jobs:
           coverage run manage.py test -v 2
           coverage report
           coverage xml
+          ls
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
