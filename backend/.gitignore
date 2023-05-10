@@ -2,3 +2,6 @@ ambiente
 __pycache__
 migrations
 settings.py
+.coverage
+coverage.xml
+htmlcov

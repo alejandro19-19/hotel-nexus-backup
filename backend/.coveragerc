@@ -1,0 +1,12 @@
+[run]
+include = 
+        core\serializers.py 
+        core\views.py 
+        core\models.py 
+omit =
+        manage.py
+        */tests/*
+        */staticfiles/*
+        */migrations/*
+        */__init__.py
+        
