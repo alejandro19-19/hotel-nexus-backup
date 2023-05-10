@@ -1,0 +1,18 @@
+[run]
+relative_files = True
+branch = True
+include =
+        ./core/* 
+
+omit =
+        manage.py
+        */tests/*
+        */staticfiles/*
+        */migrations/*
+        */__init__.py
+        hotelNexus\urls.py
+        hotelNexus\settings.py
+        core\apps.py
+        core\admin.py  
+[xml]
+output = coverage.xml
