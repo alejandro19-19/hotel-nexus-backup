@@ -1,11 +1,12 @@
 [run]
-include = 
-        core\serializers.py 
-        core\views.py 
 omit =
         manage.py
         */tests/*
         */staticfiles/*
         */migrations/*
         */__init__.py
-        
+        hotelNexus\urls.py
+        hotelNexus\settings.py
+        core\apps.py
+        core\admin.py  
+    
