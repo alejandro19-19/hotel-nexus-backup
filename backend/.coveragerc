@@ -2,9 +2,9 @@
 relative_files = True
 branch = True
 include =
-        core/models.py 
-        core/serializers.py 
-        core/views.py  
+        /core/models.py 
+        /core/serializers.py 
+        /core/views.py  
 
 omit =
         manage.py
