@@ -69,7 +69,7 @@ class client_view(APIView):
         serializer = AssignRoomSerializer(
             user_client, data=request.data, context={'request': request})
         if serializer.is_valid():
-            return verificarHabitacion(request, serializer)
+            return verificar_habitacion(request, serializer)
         else:
             return Response({"error": True, "informacion": ERROR_SERIALIZER }, status=status.HTTP_400_BAD_REQUEST)
 
@@ -174,7 +174,7 @@ def get_token(request):
 
 #metodos auxiliares
 
-def verificarHabitacion(request,serializer):
+def verificar_habitacion(request,serializer):
     try:
         room = Habitacion.objects.get(pk=request.data['habitacion_id'])
         if room.disponible==False:
