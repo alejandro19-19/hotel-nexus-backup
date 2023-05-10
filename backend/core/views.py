@@ -1,20 +1,20 @@
 from django.shortcuts import render
-from rest_framework import status
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken, AuthTokenSerializer
 from rest_framework.response import Response
 from core.serializers import UserSerializer, HabitacionSerializer, AdminClientSerializer, StaffSerializer, AssignRoomSerializer, ClientRoomSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.decorators import api_view
 from rest_framework.settings import api_settings
-from rest_framework.decorators import permission_classes, authentication_classes
+from rest_framework.decorators import permission_classes, authentication_classes, api_view
+from django.views.decorators.http import require_http_methods
 from django.template import loader
 from .models import Administrador, User, Cliente, Habitacion, Recepcionista
 from rest_framework.views import APIView
 
 ERROR_SERIALIZER = "Los datos enviados no son correctos"
+ERROR_STAFF = "El usuario no es parte del staff"
 
 # Create your views here.
 
@@ -117,7 +117,8 @@ class recepcionista_view(APIView):
         return Response({"Info_user": serializer.data} , status=status.HTTP_200_OK)
 
 # Metodo para que un administrador obtenga la informacion de todos los clientes existentes
-@api_view(['GET',])
+@api_view(['GET'])
+@require_http_methods(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def get_clients(request):
@@ -128,10 +129,11 @@ def get_clients(request):
             user_client, many=True, context={'request': request})
         return Response({'Clientes':serializer.data},status=status.HTTP_200_OK)
     else:
-        return Response({"error": True, "informacion": "El usuario no es parte del staff" }, status=status.HTTP_401_UNAUTHORIZED)
+        return Response({"error": True, "informacion": ERROR_STAFF }, status=status.HTTP_401_UNAUTHORIZED)
     
 # Metodo para que un administrador obtenga la informacion de todas las habitaciones disponibles 
-@api_view(['GET',])
+@api_view(['GET'])
+@require_http_methods(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def get_free_rooms(request):
@@ -142,11 +144,12 @@ def get_free_rooms(request):
             rooms, many=True, context={'request': request})
         return Response(serializer.data ,status=status.HTTP_200_OK)
     else:
-        return Response({"error": True, "informacion": "El usuario no es parte del staff" }, status=status.HTTP_401_UNAUTHORIZED)
+        return Response({"error": True, "informacion": ERROR_STAFF }, status=status.HTTP_401_UNAUTHORIZED)
     
 # Metodo para que un administrador obtenga la informacion de todas las habitaciones ocupadas
 
-@api_view(['GET',])
+@api_view(['GET'])
+@require_http_methods(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def get_occupied_rooms(request):
@@ -158,7 +161,7 @@ def get_occupied_rooms(request):
         return Response(serializer.data,status=status.HTTP_200_OK)
         #aqui poner la logica de la consulta a la BD y el serializador
     else:
-        return Response({"error": True, "informacion": "El usuario no es parte del staff" }, status=status.HTTP_401_UNAUTHORIZED)
+        return Response({"error": True, "informacion": ERROR_STAFF }, status=status.HTTP_401_UNAUTHORIZED)
 
 #   Metodo que devulve el token de un usuario
 @api_view(['POST'])
