@@ -1,4 +1,11 @@
 [run]
+relative_files = True
+branch = True
+include =
+        core/models.py 
+        core/serializers.py 
+        core/views.py  
+
 omit =
         manage.py
         */tests/*
@@ -9,4 +16,5 @@ omit =
         hotelNexus\settings.py
         core\apps.py
         core\admin.py  
-    
+[xml]
+output = coverage.xml
