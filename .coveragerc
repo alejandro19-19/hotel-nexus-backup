@@ -2,7 +2,7 @@
 relative_files = True
 branch = True
 include =
-        ./core/* 
+        core/* 
 
 omit =
         manage.py
